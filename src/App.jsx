@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import './styles/global.css';
+import ServicePage from './pages/ServicePage';
+import FAQPage from './pages/FAQPage';
+import Logo from './components/Logo';
 
 /* ─── Inline SVG icons ──────────────────────────────────────────────────────── */
 const ChevronUp = () => (
@@ -43,6 +47,8 @@ function BackToTop() {
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 60);
@@ -52,18 +58,21 @@ function Nav() {
 
   const close = () => setMenuOpen(false);
 
+  // On sub-pages, hash links need to navigate home first
+  const homeHash = (hash) => isHome ? hash : `/${hash}`;
+
   return (
     <>
       <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav__inner">
-          <a href="#home" className="nav__logo" onClick={close}>
-            <span className="nav__logo-main">Joy In Learning</span>
-            <span className="nav__logo-sub">Educational Therapy</span>
+          <a href={homeHash('#home')} className="nav__logo" onClick={close}>
+            <Logo />
           </a>
           <ul className="nav__links">
-            {[['#services', 'Services'], ['#team', 'Our Team'], ['#about', 'About'], ['#contact', 'Contact']].map(([href, label]) => (
-              <li key={href}><a href={href}>{label}</a></li>
+            {[['#services', 'Services'], ['#team', 'Our Team'], ['#about', 'About'], ['#contact', 'Contact']].map(([hash, label]) => (
+              <li key={hash}><a href={homeHash(hash)}>{label}</a></li>
             ))}
+            <li><Link to="/faq">FAQ</Link></li>
           </ul>
           <a href="tel:8627545296" className="nav__book">Free Consultation</a>
           <button
@@ -77,9 +86,10 @@ function Nav() {
       </nav>
 
       <div className={`nav__mobile ${menuOpen ? 'open' : ''}`}>
-        {[['#home', 'Home'], ['#services', 'Services'], ['#team', 'Our Team'], ['#about', 'About'], ['#contact', 'Contact']].map(([href, label]) => (
-          <a key={href} href={href} onClick={close}>{label}</a>
+        {[['#home', 'Home'], ['#services', 'Services'], ['#team', 'Our Team'], ['#about', 'About'], ['#contact', 'Contact']].map(([hash, label]) => (
+          <a key={hash} href={homeHash(hash)} onClick={close}>{label}</a>
         ))}
+        <Link to="/faq" onClick={close}>FAQ</Link>
         <a href="tel:8627545296" className="btn btn-dark btn-sm" onClick={close}><span>Free Consultation</span></a>
       </div>
     </>
@@ -153,12 +163,12 @@ function Hero() {
 
 /* ─── Marquee ────────────────────────────────────────────────────────────────── */
 const MARQUEE_ITEMS = [
-  { label: 'NILD Therapy',       bg: 'radial-gradient(ellipse at 30% 70%, #2d6a4f 0%, #0f1e12 100%)' },
-  { label: 'Dyslexia Testing',   bg: 'radial-gradient(ellipse at 70% 30%, #4a7c5f 0%, #1a2a1a 100%)' },
-  { label: 'Cognitive Coaching', bg: 'radial-gradient(ellipse at 50% 50%, #c9a96e 0%, #3d2a10 100%)' },
-  { label: 'Search & Teach',     bg: 'radial-gradient(ellipse at 20% 80%, #2d6a4f 0%, #0a0f0a 100%)' },
-  { label: 'WJ-V Testing',       bg: 'radial-gradient(ellipse at 80% 20%, #e8d5a8 0%, #5a4020 100%)' },
-  { label: '1-on-1 Sessions',    bg: 'radial-gradient(ellipse at 50% 30%, #5a8a6a 0%, #0f1e12 100%)' },
+  { label: 'NILD Therapy',       photo: 'https://images.unsplash.com/photo-1758685733907-42e9651721f5?auto=format&fit=crop&w=400&h=320&q=80&crop=top' },
+  { label: 'Dyslexia Testing',   photo: 'https://images.unsplash.com/photo-1549737221-bef65e2604a6?auto=format&fit=crop&w=400&h=320&q=80' },
+  { label: 'Cognitive Coaching', photo: 'https://images.unsplash.com/photo-1546458932-22b70896a584?auto=format&fit=crop&w=400&h=320&q=80' },
+  { label: 'Search & Teach',     photo: 'https://images.unsplash.com/photo-1761208662441-9ba3264ca7fd?auto=format&fit=crop&w=400&h=320&q=80' },
+  { label: 'WJ-V Testing',       photo: 'https://images.unsplash.com/photo-1585432959322-4db03962b004?auto=format&fit=crop&w=400&h=320&q=80' },
+  { label: '1-on-1 Sessions',    photo: 'https://images.unsplash.com/photo-1583468991267-3f068b607ae1?auto=format&fit=crop&w=400&h=320&q=80' },
 ];
 const MARQUEE = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS]; // doubled for seamless loop
 
@@ -168,7 +178,8 @@ function Marquee() {
       <div className="marquee-track">
         {MARQUEE.map((item, i) => (
           <div key={i} className="marquee-item">
-            <div className="marquee-item-bg" style={{ background: item.bg }} />
+            <div className="marquee-item-bg" style={{ backgroundImage: `url(${item.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+            <div className="marquee-item-overlay" />
             <span className="marquee-item-label">{item.label}</span>
           </div>
         ))}
@@ -229,35 +240,40 @@ function About() {
 /* ─── Services ───────────────────────────────────────────────────────────────── */
 const SERVICES = [
   {
+    slug:     'nild-educational-therapy',
     title:    'NILD Educational Therapy',
     desc:     'The core of our practice. NILD targets the cognitive foundations of learning — strengthening memory, attention, reasoning, and language through intensive, research-backed 1-on-1 sessions.',
     duration: 'Ongoing sessions',
-    bg:       'radial-gradient(ellipse at 35% 65%, #2d6a4f 0%, #1a3c34 55%, #060c08 100%)',
+    photo:    'https://images.unsplash.com/photo-1758685733907-42e9651721f5?auto=format&fit=crop&w=800&q=80',
   },
   {
+    slug:     'cognitive-coaching',
     title:    'Cognitive Coaching',
     desc:     'Sharpen focus, build mental stamina, and develop powerful learning strategies. Available to students, adults, and professionals of all ages — not just children.',
     duration: 'All ages welcome',
     isNew:    true,
-    bg:       'radial-gradient(ellipse at 65% 35%, #c9a96e 0%, #6b4c20 45%, #1a1410 100%)',
+    photo:    'https://images.unsplash.com/photo-1546458932-22b70896a584?auto=format&fit=crop&w=800&q=80',
   },
   {
+    slug:     'dyslexia-testing',
     title:    'Dyslexia Testing',
     desc:     'Comprehensive diagnostic evaluation identifying dyslexia and related reading challenges. Results support targeted intervention and provide documentation for school accommodations.',
     duration: 'Full-day assessment',
-    bg:       'radial-gradient(ellipse at 50% 50%, #4a7c5f 0%, #1a3c34 50%, #060c08 100%)',
+    photo:    'https://images.unsplash.com/photo-1549737221-bef65e2604a6?auto=format&fit=crop&w=800&q=80',
   },
   {
+    slug:     'woodcock-johnson-v',
     title:    'Woodcock-Johnson V',
     desc:     'The gold-standard psychoeducational battery measuring academic achievement, cognitive abilities, and oral language — a complete picture of your child\'s strengths and needs.',
     duration: 'Half/full day',
-    bg:       'radial-gradient(ellipse at 20% 80%, #c9a96e 0%, #4a3018 50%, #1a1410 100%)',
+    photo:    'https://images.unsplash.com/photo-1585432959322-4db03962b004?auto=format&fit=crop&w=800&q=80',
   },
   {
+    slug:     'search-and-teach',
     title:    'Search & Teach',
     desc:     'A visual processing and attention program for younger learners that develops the foundational perceptual skills essential for reading readiness and early academic success.',
     duration: 'Ages 4–8',
-    bg:       'radial-gradient(ellipse at 80% 20%, #d0e8d4 0%, #4a7c5f 45%, #0f1e12 100%)',
+    photo:    'https://images.unsplash.com/photo-1761208662441-9ba3264ca7fd?auto=format&fit=crop&w=800&q=80',
   },
 ];
 
@@ -276,9 +292,10 @@ function Services() {
         </div>
         <div className="services-grid">
           {SERVICES.map((svc, i) => (
-            <div key={svc.title} className={`svc-card reveal reveal-d${(i % 3) + 1}`}>
+            <Link key={svc.title} to={`/${svc.slug}`} className={`svc-card svc-card--link reveal reveal-d${(i % 3) + 1}`}>
               <div className="svc-card__img">
-                <div className="svc-card__img-bg" style={{ background: svc.bg }} />
+                <div className="svc-card__img-bg" style={{ backgroundImage: `url(${svc.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                <div className="svc-card__img-overlay" />
               </div>
               <div className="svc-card__body">
                 <h3 className="svc-card__title">{svc.title}</h3>
@@ -287,8 +304,9 @@ function Services() {
                   <span className="svc-card__duration">{svc.duration}</span>
                   {svc.isNew && <span className="svc-card__badge-new">New</span>}
                 </div>
+                <span className="svc-card__learn-more">Learn more →</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -311,6 +329,7 @@ const TEAM = [
   {
     name:     'Alise McCain',
     initials: 'AM',
+    photo:    'https://static.wixstatic.com/media/7e3a4d_b807b7f348834ffa9b8df12e7e83a115~mv2.png/v1/fill/w_467,h_426,al_c,q_85,enc_avif,quality_auto/Screenshot%202026-01-17%20at%2010_49_13.png',
     role:     'NILD Educational Therapist',
     bio:      'Alise holds a Master\'s in educational therapy and is a certified IDA Structured Literacy Dyslexia Specialist. She brings deep expertise with older students navigating dyslexia, processing challenges, and ADHD, having homeschooled her own three children for 20 years.',
     quote:    '"Dyslexia is not a barrier. It\'s a different pathway — and every pathway leads somewhere remarkable."',
@@ -516,7 +535,7 @@ function Contact() {
               <span className="contact__detail-value">Online — Nationwide</span>
             </div>
             <div className="contact__social reveal reveal-d3">
-              <a href="#" className="contact__social-link">
+              <a href="https://www.facebook.com/joyinlearningdiscoverycenter" target="_blank" rel="noreferrer" className="contact__social-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                 Facebook
               </a>
@@ -531,7 +550,7 @@ function Contact() {
           <div className="reveal reveal-d2">
             <div className="contact__form-wrap">
               <form onSubmit={(e) => e.preventDefault()}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 1.5rem' }}>
+                <div className="form-name-row">
                   <div className="form-field">
                     <label className="form-label" htmlFor="fname">First Name</label>
                     <input id="fname" className="form-input" type="text" placeholder="Jane" />
@@ -589,13 +608,11 @@ function Footer() {
   );
 }
 
-/* ─── App ─────────────────────────────────────────────────────────────────────── */
-export default function App() {
+/* ─── Home page ───────────────────────────────────────────────────────────────── */
+function HomePage() {
   useReveal();
   return (
     <>
-      <BackToTop />
-      <Nav />
       <Hero />
       <Marquee />
       <About />
@@ -605,6 +622,21 @@ export default function App() {
       <Process />
       <CTABanner />
       <Contact />
+    </>
+  );
+}
+
+/* ─── App ─────────────────────────────────────────────────────────────────────── */
+export default function App() {
+  return (
+    <>
+      <BackToTop />
+      <Nav />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/:slug" element={<ServicePage />} />
+      </Routes>
       <Footer />
     </>
   );
