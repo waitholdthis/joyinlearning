@@ -1271,6 +1271,8 @@ ul { list-style: none; }
   }
   .nav__mobile a:last-of-type { border-bottom: none; }
   .nav__mobile .btn { margin-top: 2rem; width: 100%; justify-content: center; }
+  .nav__mobile a.btn-dark,
+  .nav__mobile a.btn-ghost { color: var(--cream); }
 
   /* Hero */
   .hero-content   { padding: 6.5rem 1.25rem 4rem; }
