@@ -121,7 +121,7 @@ function Hero() {
 
   return (
     <section id="home" className="hero">
-      <div className="hero-bg-photo" ref={bgRef} />
+      <div className="hero-bg-photo" ref={bgRef} style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/downtownfay.jpg)` }} />
       <div className="hero-grid" />
       <div className="hero-vignette" />
       <div className="hero-shimmer" />
@@ -339,7 +339,7 @@ const TEAM = [
   {
     name:     'Cherene Comick',
     initials: 'CC',
-    photo:    '/images/cherene.jpg',
+    photo:    `${import.meta.env.BASE_URL}images/cherene.jpg`,
     role:     'Founder & Lead Therapist',
     bio:      'Cherene has been a certified NILD Educational Therapist since 1994 and served as Exceptional Education Director at a private school for over 23 years. Her depth of experience and genuine compassion form the foundation of Joy In Learning.',
     quote:    '"I\'ve never met a child who didn\'t want to learn — only children who hadn\'t yet found the right door."',
@@ -621,7 +621,7 @@ function Footer() {
           </nav>
         </div>
         <div className="footer__badges">
-          <img src="/images/faychamber.png" alt="Fayetteville Chamber of Commerce Member" className="footer__badge" />
+          <img src={`${import.meta.env.BASE_URL}images/faychamber.png`} alt="Fayetteville Chamber of Commerce Member" className="footer__badge" />
         </div>
         <p className="footer__copy">
           © {new Date().getFullYear()} Joy In Learning. All rights reserved. &nbsp;|&nbsp; Serving families in Fayetteville, NC &amp; online nationwide

@@ -315,7 +315,9 @@ ul { list-style: none; }
 .hero-bg-photo {
   position: absolute;
   inset: 0;
-  background: url('/images/downtownfay.jpg') center 45% / cover no-repeat;
+  background-size: cover;
+  background-position: center 45%;
+  background-repeat: no-repeat;
   /* Mild warm grade — keeps the brick colour, darkens sky for legibility */
   filter: sepia(0.12) saturate(1.08) brightness(0.58) contrast(1.10);
   animation: kenBurnsHero 36s ease-in-out infinite alternate;
