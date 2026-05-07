@@ -598,6 +598,28 @@ ul { list-style: none; }
   color: rgba(250,246,242,0.88);
 }
 
+/* ─── Video ──────────────────────────────────────────────────────────────────── */
+.video-section { background: var(--cream); }
+.video-section__inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.video-section__embed {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+}
+.video-section__embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 /* ─── About ──────────────────────────────────────────────────────────────────── */
 .about {
   background: var(--white);

@@ -188,6 +188,26 @@ function Marquee() {
   );
 }
 
+/* ─── Video ──────────────────────────────────────────────────────────────────── */
+function VideoSection() {
+  return (
+    <section className="video-section section">
+      <div className="container">
+        <div className="video-section__inner reveal">
+          <div className="video-section__embed">
+            <iframe
+              src="https://www.youtube.com/embed/u6MCtaBctp8?start=148"
+              title="Joy in Learning Discovery Center"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ─── About ──────────────────────────────────────────────────────────────────── */
 function About() {
   return (
@@ -618,6 +638,7 @@ function HomePage() {
     <>
       <Hero />
       <Marquee />
+      <VideoSection />
       <About />
       <Services />
       <Team />
