@@ -600,6 +600,9 @@ function Footer() {
             ))}
           </nav>
         </div>
+        <div className="footer__badges">
+          <img src="/images/faychamber.png" alt="Fayetteville Chamber of Commerce Member" className="footer__badge" />
+        </div>
         <p className="footer__copy">
           © {new Date().getFullYear()} Joy In Learning. All rights reserved. &nbsp;|&nbsp; Serving families in Fayetteville, NC &amp; online nationwide
         </p>

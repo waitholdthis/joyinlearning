@@ -1189,6 +1189,18 @@ ul { list-style: none; }
   transition: color 0.2s;
 }
 .footer__links a:hover { color: var(--cream); }
+.footer__badges {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0 0.5rem;
+}
+.footer__badge {
+  height: 80px;
+  width: auto;
+  opacity: 0.85;
+  filter: brightness(0) invert(1);
+}
+.footer__badge:hover { opacity: 1; }
 .footer__copy {
   font-size: 0.7rem;
   font-weight: 300;
